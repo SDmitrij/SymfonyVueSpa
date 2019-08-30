@@ -14,14 +14,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            entry_point: App\Security\AuthenticationEntryPoint
             anonymous: true
-
             provider: pdo
-
             json_login:
                 check_path: /api/security/login
-
             logout:
                 path: /api/security/logout
 

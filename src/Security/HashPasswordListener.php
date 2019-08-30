@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Security;
 
@@ -7,50 +7,38 @@ use App\Entity\BaseUser;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use function get_class;
 
 final class HashPasswordListener implements EventSubscriber
 {
     /** @var UserPasswordEncoderInterface */
     private $passwordEncoder;
 
-    /**
-     * HashPasswordListener constructor.
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     * @return void
-     */
     public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
-        if (!$entity instanceof BaseUser) {
+        if (! $entity instanceof BaseUser) {
             return;
         }
-
         $this->encodePassword($entity);
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     * @return void
-     */
     public function preUpdate(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
-        if (!$entity instanceof BaseUser) {
+        if (! $entity instanceof BaseUser) {
             return;
         }
-
         $this->encodePassword($entity);
+
         // necessary to force the update to see the change
         $em = $args->getEntityManager();
-        $meta = $em->getClassMetadata(\get_class($entity));
+        $meta = $em->getClassMetadata(get_class($entity));
         $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta, $entity);
     }
 
@@ -62,21 +50,16 @@ final class HashPasswordListener implements EventSubscriber
         return ['prePersist', 'preUpdate'];
     }
 
-    /**
-     * @param BaseUser $entity
-     * @return void
-     */
     private function encodePassword(BaseUser $entity): void
     {
-        if (\is_null($entity->getPlainPassword())) {
+        $plainPassword = $entity->getPlainPassword();
+        if ($plainPassword === null) {
             return;
         }
-
         $encoded = $this->passwordEncoder->encodePassword(
             $entity,
-            $entity->getPlainPassword()
+            $plainPassword
         );
-
         $entity->setPassword($encoded);
     }
 }

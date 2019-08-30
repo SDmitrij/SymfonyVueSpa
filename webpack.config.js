@@ -1,7 +1,7 @@
 var Encore = require('@symfony/webpack-encore');
 
 Encore
-// directory where compiled assets will be stored
+    // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
     .setPublicPath('/build')
@@ -34,6 +34,14 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
+
+    // enables @babel/preset-env polyfills
+    .configureBabel((babelConfig) => {
+        babelConfig.plugins.push('@babel/plugin-transform-runtime');
+    }, {
+        useBuiltIns: 'usage',
+        corejs: 3
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();
