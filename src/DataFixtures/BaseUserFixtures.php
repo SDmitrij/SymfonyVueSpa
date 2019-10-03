@@ -16,8 +16,8 @@ class BaseUserFixtures extends BaseFixture
         $this->createMany(20, "semantic_users", function ($i) {
            $baseUser = new BaseUser();
            $baseUser->setLogin($this->faker->email);
-           $baseUser->setPlainPassword($this->faker->password);
-           $baseUser->setRoles(["ROLE_SEMANTIC_USER"]);
+           $baseUser->setPlainPassword(1488);
+           $baseUser->setRoles([BaseUser::ROLE_SEMANTIC_USER]);
 
            return $baseUser;
         });

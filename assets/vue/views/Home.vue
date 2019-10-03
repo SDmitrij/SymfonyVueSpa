@@ -5,7 +5,7 @@
         </div>
 
         <div class="row col">
-            <p>This is the homepage of our Vue.js application.</p>
+            <p>Welcome to semantic cloud!</p>
         </div>
     </div>
 </template>

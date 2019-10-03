@@ -6,5 +6,11 @@ export default {
             username: login,
             password: password
         });
+    },
+    register(login, password) {
+        return axios.post("/api/base_user", {
+            username: login,
+            password: password
+        });
     }
 }

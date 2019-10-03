@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class BaseUser implements UserInterface
 {
+    /** @var string */
+    public const ROLE_SEMANTIC_USER = "ROLE_SEMANTIC_USER";
+
     /**
      * @var int
      * @ORM\Id
@@ -27,6 +30,9 @@ class BaseUser implements UserInterface
      * @var string
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank()
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $login;
 

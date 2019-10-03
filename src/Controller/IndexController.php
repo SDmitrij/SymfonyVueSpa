@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -32,7 +30,7 @@ final class IndexController extends AbstractController
 
         if (!empty($user)) {
             $userClone = clone $user;
-            $userClone->setPassword('');
+            $userClone->setPassword("");
             $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
         }
 

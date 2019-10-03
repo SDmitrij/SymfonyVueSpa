@@ -1,12 +1,6 @@
 <template>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <router-link
-                class="navbar-brand"
-                to="/home"
-            >
-                App
-            </router-link>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -30,6 +24,22 @@
                         active-class="active"
                     >
                         <a class="nav-link">Home</a>
+                    </router-link>
+                    <router-link
+                            class="nav-item"
+                            tag="li"
+                            to="/login"
+                            active-class="active"
+                    >
+                        <a class="nav-link">Login</a>
+                    </router-link>
+                    <router-link
+                            class="nav-item"
+                            tag="li"
+                            to="/register"
+                            active-class="active"
+                    >
+                        <a class="nav-link">Register</a>
                     </router-link>
                     <li
                         v-if="isAuthenticated"

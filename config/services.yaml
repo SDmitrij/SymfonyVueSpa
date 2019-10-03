@@ -24,8 +24,10 @@ services:
         tags: ['controller.service_arguments']
 
     # hash password listener
-    app.security.hash.password.listener:
+    app_security_hash_password_listener:
         class: App\Security\HashPasswordListener
         tags:
             - { name: doctrine.event_subscriber }
+
+
 

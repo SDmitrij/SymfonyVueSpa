@@ -1,12 +1,18 @@
 <template>
     <div
-            class="alert alert-danger"
-            role="alert"
+        class="alert alert-danger"
+        role="alert"
     >
         {{ error.response.data.error }}
     </div>
 </template>
-
+<style>
+    .alert-danger {
+        top: 10px;
+        width: 423px;
+        text-align: center;
+    }
+</style>
 <script>
     export default {
         name: "ErrorMessage",
