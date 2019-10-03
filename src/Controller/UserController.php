@@ -55,7 +55,7 @@ class UserController
      * @param Request $request
      * @return JsonResponse
      */
-    public function postBaseUser(Request $request) : JsonResponse
+    public function postBaseUser(Request $request): JsonResponse
     {
         $baseUser = new BaseUser();
 
@@ -82,9 +82,47 @@ class UserController
             true);
     }
 
-    public function putBaseUser() {}
+    /**
+     * @Rest\Put("/base_user")
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function putBaseUser(Request $request): JsonResponse
+    {
+        $baseUserId = $request->request->get("userId");
 
-    public function getBaseUser() {}
+        if (!is_null($baseUserId)) {
+            $baseUser = $this->em->find("App:BaseUser", $baseUserId);
 
-    public function deleteBaseUser() {}
+            if ($baseUser instanceof BaseUser) {
+                $baseUser->setLogin($request->request->get("username"));
+                $baseUser->setPlainPassword($request->request->get("password"));
+
+                // Validation
+                $errors = $this->validator->validate($baseUser);
+                if (count($errors) > 0) {
+                    $errorsStr = (string) $errors;
+
+                    return new JsonResponse(json_encode($errorsStr), Response::HTTP_BAD_REQUEST, [], true);
+                }
+
+                $this->em->flush();
+
+                return new JsonResponse($this->serializer->serialize($baseUser, JsonEncoder::FORMAT),
+                    Response::HTTP_OK, [],
+                    true);
+            } else {
+                return new JsonResponse("Can't find user with identifier: $baseUserId.",
+                    Response::HTTP_BAD_REQUEST);
+            }
+        } else {
+            return new JsonResponse("User identifier is null.", Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function deleteBaseUser()
+    {
+
+    }
 }

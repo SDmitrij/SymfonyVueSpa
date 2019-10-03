@@ -1,67 +1,55 @@
 <template>
     <div>
-        <div class="row col">
-            <h1>Login</h1>
-        </div>
-
+        <hr>
         <div class="row col">
             <form>
-                <div class="form-row">
-                    <div class="col-4">
-                        <label>
-                            <input
-                                v-model="login"
-                                type="text"
-                                class="form-control"
-                            >
-                        </label>
-                    </div>
-                    <div class="col-4">
-                        <label>
-                            <input
-                                v-model="password"
-                                type="password"
-                                class="form-control"
-                            >
-                        </label>
-                    </div>
-                    <div class="col-4">
-                        <button
-                            :disabled="login.length === 0 || password.length === 0 || isLoading"
-                            type="button"
-                            class="btn btn-primary"
-                            @click="performLogin()"
+                <div class="form-group">
+                    <label>
+                        <strong>Login</strong>
+                        <input
+                            v-model="login"
+                            type="text"
+                            class="form-control"
                         >
-                            Login
-                        </button>
-                    </div>
+                    </label>
+                    <div v-if="hasError" class="invalid-feedback">Error</div>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <strong>Password</strong>
+                        <input
+                            v-model="password"
+                            type="password"
+                            class="form-control"
+                        >
+                    </label>
+                    <div v-if="hasError" class="invalid-feedback">Error</div>
+                </div>
+                <div class="form-group">
+                    <button
+                        :disabled="login.length === 0 || password.length === 0 || isLoading"
+                        type="button"
+                        class="btn btn-primary"
+                        @click="performLogin()"
+                    >
+                        Login
+                    </button>
                 </div>
             </form>
-        </div>
 
-        <div
-            v-if="isLoading"
-            class="row col"
-        >
-            <p>Loading...</p>
-        </div>
-
-        <div
-            v-else-if="hasError"
-            class="row col"
-        >
-            <error-message :error="error" />
+            <div
+                v-if="isLoading"
+                class="row col"
+            >
+                <p>Loading...</p>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import ErrorMessage from "../components/ErrorMessage";
     export default {
         name: "Login",
-        components: {
-            ErrorMessage,
-        },
         data() {
             return {
                 login: "",
