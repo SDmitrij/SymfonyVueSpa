@@ -12,7 +12,7 @@
                             class="form-control"
                         >
                     </label>
-                    <div v-if="hasError" class="invalid-feedback">Error</div>
+                    <span v-if="hasError">Error</span>
                 </div>
                 <div class="form-group">
                     <label>

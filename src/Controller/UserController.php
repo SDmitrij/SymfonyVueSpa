@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class UserController
 {
-
     /** @var EntityManagerInterface */
     private $em;
 
@@ -109,7 +108,10 @@ class UserController
 
                 $this->em->flush();
 
-                return new JsonResponse($this->serializer->serialize($baseUser, JsonEncoder::FORMAT),
+                $userToResp = clone $baseUser;
+                $userToResp->setPlainPassword("");
+
+                return new JsonResponse($this->serializer->serialize($userToResp, JsonEncoder::FORMAT),
                     Response::HTTP_OK, [],
                     true);
             } else {
@@ -121,8 +123,31 @@ class UserController
         }
     }
 
-    public function deleteBaseUser()
+    /**
+     * @Rest\Delete("/base_user")
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteBaseUser(Request $request): JsonResponse
     {
+        $baseUserId = $request->request->get("userId");
 
+        if (!is_null($baseUserId)) {
+            $baseUser = $this->em->find("App:BaseUser", $baseUserId);
+
+            if ($baseUser instanceof BaseUser) {
+
+                $this->em->remove($baseUser);
+                $this->em->flush();
+
+                return new JsonResponse("Delete success.", Response::HTTP_OK);
+            } else {
+                return new JsonResponse("Can't find user with identifier: $baseUserId.",
+                    Response::HTTP_BAD_REQUEST);
+            }
+        } else {
+            return new JsonResponse("User identifier is null.", Response::HTTP_BAD_REQUEST);
+        }
     }
 }
